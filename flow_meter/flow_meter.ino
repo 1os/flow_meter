@@ -620,7 +620,42 @@ void SetFactoryReset() {
     EEPROM.update(_addr_usedLifetime6, 255);
     EEPROM.update(_addr_active6, 255);
 
+    _total = 0;
+    _min_Name = "";
+    _min_val = 1000000;
+
+    _filterName1 = "Filter1";
+    _lifetime1 = 10000;
+    _usedLifetime1 = 0;
+    _active1 = true;
+
+    _filterName2 = "Filter2";
+    _lifetime2 = 20000;
+    _usedLifetime2 = 0;
+    _active2 = true;
+
+    _filterName3 = "Filter3";
+    _lifetime3 = 10000;
+    _usedLifetime3 = 0;
+    _active3 = true;
+
+    _filterName4 = "Filter4";
+    _lifetime4 = 5000;
+    _usedLifetime4 = 0;
+    _active4 = true;
+
+    _filterName5 = "Filter5";
+    _lifetime5 = 5000;
+    _usedLifetime5 = 0;
+    _active5 = true;
+
+    _filterName6 = "Filter6";
+    _lifetime6 = 1000;
+    _usedLifetime6 = 0;
+    _active6 = false;
+
     Sensor.resetVolume();
+    reset = 0;
   }
 }
 
@@ -630,7 +665,7 @@ void idleFunc() {
     if (Sensor.getFlowRate_m() > 0) {
       lcdDisplay.backlight();
       updateMin();
-      lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val / MeasureCoef);
+      lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val);
       lcdDisplay.printfAt(0, 1, "%8s%8s", "Total", String((_total + Sensor.getVolume() * MeasureCoef) / MeasureCoef).c_str());
       if (_min_val < 100) {
         digitalWrite(buzzer, LOW);
@@ -692,8 +727,9 @@ void idleFunc() {
       updateCaption(mkFilter6, buf, _lifetime6 - _usedLifetime6 / MeasureCoef);
     }
     updateMin();
-
     Sensor.resetVolume();
+    lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val);
+    lcdDisplay.printfAt(0, 1, "%8s%8s", "Total", String((_total + Sensor.getVolume() * MeasureCoef) / MeasureCoef).c_str());
     reset = millis();
   }
 }
@@ -778,8 +814,8 @@ void setup() {
   lcdDisplay.backlight();
   Sensor.read();
   updateMin();
-  lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val / MeasureCoef);
-      lcdDisplay.printfAt(0, 1, "%8s%8s", "Total", String((_total + Sensor.getVolume() * MeasureCoef) / MeasureCoef).c_str());
+  lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val);
+  lcdDisplay.printfAt(0, 1, "%8s%8s", "Total", String((_total + Sensor.getVolume() * MeasureCoef) / MeasureCoef).c_str());
 
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer, LOW);
@@ -788,29 +824,29 @@ void setup() {
 }
 
 void updateMin() {
-  if (_min_val > _lifetime1 - (_usedLifetime1 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active1) {
+  if (_min_val > _lifetime1 - (_usedLifetime1 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active1) {
     _min_Name = _filterName1;
-    _min_val = _lifetime1 - (_usedLifetime1 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime1 - (_usedLifetime1 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
-  if (_min_val > _lifetime2 - (_usedLifetime2 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active2) {
+  if (_min_val > _lifetime2 - (_usedLifetime2 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active2) {
     _min_Name = _filterName2;
-    _min_val = _lifetime2 - (_usedLifetime2 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime2 - (_usedLifetime2 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
-  if (_min_val > _lifetime3 - (_usedLifetime3 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active3) {
+  if (_min_val > _lifetime3 - (_usedLifetime3 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active3) {
     _min_Name = _filterName3;
-    _min_val = _lifetime3 - (_usedLifetime3 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime3 - (_usedLifetime3 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
-  if (_min_val > _lifetime4 - (_usedLifetime4 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active4) {
+  if (_min_val > _lifetime4 - (_usedLifetime4 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active4) {
     _min_Name = _filterName4;
-    _min_val = _lifetime4 - (_usedLifetime4 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime4 - (_usedLifetime4 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
-  if (_min_val > _lifetime5 - (_usedLifetime5 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active5) {
+  if (_min_val > _lifetime5 - (_usedLifetime5 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active5) {
     _min_Name = _filterName5;
-    _min_val = _lifetime5 - (_usedLifetime5 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime5 - (_usedLifetime5 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
-  if (_min_val > _lifetime6 - (_usedLifetime6 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) && _active6) {
+  if (_min_val > _lifetime6 - (_usedLifetime6 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef && _active6) {
     _min_Name = _filterName6;
-    _min_val = _lifetime6 - (_usedLifetime6 + (uint32_t)(Sensor.getVolume() * MeasureCoef));
+    _min_val = _lifetime6 - (_usedLifetime6 + (uint32_t)(Sensor.getVolume() * MeasureCoef)) / MeasureCoef;
   }
 }
 
@@ -825,7 +861,7 @@ void loop() {
     if (selectedMenuItem == mkDashScreen) {
       Sensor.read();
       updateMin();
-      lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val / MeasureCoef);
+      lcdDisplay.printfAt(0, 0, "%8s%8d", _min_Name, _min_val);
       lcdDisplay.printfAt(0, 1, "%8s%8s", "Total", String((_total + Sensor.getVolume() * MeasureCoef) / MeasureCoef).c_str());
     }
   }

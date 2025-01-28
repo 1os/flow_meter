@@ -1,0 +1,13 @@
+libraries/FlowSensor/CODE_OF_CONDUCT.md
+libraries/FlowSensor/CONTRIBUTING.md
+libraries/FlowSensor/keyword.txt
+libraries/FlowSensor/library.json
+libraries/FlowSensor/library.properties
+libraries/FlowSensor/LICENSE.md
+libraries/FlowSensor/README.md
+libraries/FlowSensor/examples/Read_Flow_Rate/Read_Flow_Rate.ino
+libraries/FlowSensor/examples/Read_Flow_Rate_and_Volume/Read_Flow_Rate_and_Volume.ino
+libraries/FlowSensor/examples/Read_Volume/Read_Volume.ino
+libraries/FlowSensor/src/FlowSensor_Type.h
+libraries/FlowSensor/src/FlowSensor.cpp
+libraries/FlowSensor/src/FlowSensor.h
